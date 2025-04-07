@@ -51,7 +51,7 @@ class Fighter(): # класс бойца
 
     def change_weapon(self, weapon): # метод выбора или смены оружия
         self.weapon = weapon
-        print(f'Боец выбрал {self.weapon}')
+        print(f'Боец сменил оружие')
 
     def open_fier(self):  # метод атаки выбранным оружием
         kind_weapon = self.weapon.attack()
@@ -60,11 +60,11 @@ class Fighter(): # класс бойца
 mech = Mech()  # создаем обьект оружия меч
 luk = Luk() # создаем обьект оружия лук
 
-Ilia_mech = Fighter(mech)   # боец Илья берет меч
-Ilia_luk = Fighter(luk) # боец Илья берет лук
-
-Ilia_mech.open_fier() # боец Илья использующий меч
-Ilia_luk.open_fier() # боец Илья использующий лук
+# Ilia_mech = Fighter(mech)   # боец Илья с мечом
+# Ilia_luk = Fighter(luk) # боец Илья с луком
+#
+# Ilia_mech.open_fier() # боец Илья использующий меч, применяет его
+# Ilia_luk.open_fier() # боец Илья использующий лук, применяет его
 
 Alesha = Fighter(mech) # боец Алеша использует меч
 Alesha.open_fier() # боец Алеша наносит удар
