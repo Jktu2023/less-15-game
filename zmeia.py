@@ -10,7 +10,10 @@ import random
 import  sys
 
 pygame.init() # Для автоматической инициализации всех модулей Pygame, это команда, которая запускает pygame
-pygame.mixer.init()  # для звука
+pygame.mixer.init()  # Инициализация модуля звука
+
+# Загрузка звуковых эффектов
+eat_sound = pygame.mixer.Sound("eat_.wav")  # Путь к  звуковому файлу
 
 # ФПС
 clock = pygame.time.Clock() # clock, чтобы убедиться, что игра работает с заданной частотой кадров.
@@ -89,12 +92,14 @@ while run:
     # Проверка на столкновение с клубникой
     for rasp_rect in rasp_positions[:]:
         if cursor_rect.colliderect(rasp_rect):
+            eat_sound.play()  # Воспроизводим звук поедания
             print('Съела МАЛИНУ')
             rasp_positions.remove(rasp_rect)  # Удаляем клубнику, если съели
 
     # Проверка на столкновение с яблоком
     for apple_rect in apple_positions[:]:
         if cursor_rect.colliderect(apple_rect):
+            eat_sound.play()  # Воспроизводим звук поедания
             print('Съела ЯБЛОКО')
             apple_positions.remove(apple_rect)  # Удаляем яблоко, если съели
 
