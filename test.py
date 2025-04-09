@@ -1,4 +1,5 @@
 import pygame
+import random
 import sys
 
 pygame.init()  # Для автоматической инициализации всех модулей Pygame
@@ -14,18 +15,33 @@ image_snake = pygame.image.load("snake.png")  # Загружаем изобра�
 image_apple = pygame.image.load("apple.png")  # Загружаем изображение яблока
 image_rasp = pygame.image.load("rasp1.png")  # Загружаем изображение клубники
 
-# Устанавливаем позицию изображений
-image_rect_apple = image_apple.get_rect(topleft=(200, 200))  # Устанавливаем позицию для яблока
-image_rect_rasp = image_rasp.get_rect(topleft=(700, 400))  # Устанавливаем позицию для клубники
-
 # Создаём окно с определёнными размерами, с заголовком
 window_size = (800, 600)
 screen = pygame.display.set_mode(window_size)
 pygame.display.set_caption("Змейка")
 
-# Переменные для отслеживания состояния яблока и клубники
-apple_visible = True
-rasp_visible = True
+# Переменная для хранения позиций яблок и клубники
+apple_positions = []
+rasp_positions = []
+
+# Генерация позиций для яблок и клубники
+def generate_positions(image_rect, count):
+    positions = []
+    for _ in range(count):
+        x = random.randint(0, window_size[0] - image_rect.width)
+        y = random.randint(0, window_size[1] - image_rect.height)
+        positions.append(pygame.Rect(x, y, image_rect.width, image_rect.height))
+    return positions
+
+# Заполняем позиции
+apple_positions = generate_positions(image_apple.get_rect(), 4)
+rasp_positions = generate_positions(image_rasp.get_rect(), 4)
+
+# Переменная для отслеживания состояния змеи
+snake_rect = image_snake.get_rect(center=(400, 300))
+
+# Инициализируем mouseX и mouseY
+mouseX, mouseY = 0, 0
 
 # Для создания игрового цикла создаём переменную и задаём цикл
 run = True
@@ -35,29 +51,34 @@ while run:
         if event.type == pygame.QUIT:
             run = False
 
-    # Получаем позицию курсора мыши
-    mouseX, mouseY = pygame.mouse.get_pos()
+        if event.type == pygame.MOUSEMOTION:
+            mouseX, mouseY = pygame.mouse.get_pos()
+            snake_rect.x = mouseX - 22
+            snake_rect.y = mouseY
 
     # Создаем прямоугольник для курсора
     cursor_rect = pygame.Rect(mouseX, mouseY, 1, 1)  # Устанавливаем минимальный размер прямоугольника
 
     # Проверка на столкновение с клубникой
-    if rasp_visible and cursor_rect.colliderect(image_rect_rasp):
-        print('Съела МАЛИНУ')
-        rasp_visible = False  # Скрываем клубнику
+    for rasp_rect in rasp_positions[:]:
+        if cursor_rect.colliderect(rasp_rect):
+            print('Съела МАЛИНУ')
+            rasp_positions.remove(rasp_rect)  # Удаляем клубнику, если съели
 
     # Проверка на столкновение с яблоком
-    if apple_visible and cursor_rect.colliderect(image_rect_apple):
-        print('Съела ЯБЛОКО')
-        apple_visible = False  # Скрываем яблоко
+    for apple_rect in apple_positions[:]:
+        if cursor_rect.colliderect(apple_rect):
+            print('Съела ЯБЛОКО')
+            apple_positions.remove(apple_rect)  # Удаляем яблоко, если съели
 
     screen.fill(BLACK)  # заливаем экран черным
+    screen.blit(image_snake, snake_rect)  # строим изображение змеи
 
-    # Отрисовка яблока и клубники, если они видимы
-    if apple_visible:
-        screen.blit(image_apple, image_rect_apple)  # строим изображение яблока
-    if rasp_visible:
-        screen.blit(image_rasp, image_rect_rasp)  # строим изображение клубники
+    # Отрисовка яблок и клубники
+    for apple_rect in apple_positions:
+        screen.blit(image_apple, apple_rect)  # строим изображение яблока
+    for rasp_rect in rasp_positions:
+        screen.blit(image_rasp, rasp_rect)  # строим изображение клубники
 
     pygame.display.flip()  # Чтобы обновлять содержимое экрана
 
