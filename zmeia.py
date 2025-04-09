@@ -49,7 +49,7 @@ rasp_positions = []
 # apple_visible = True
 # rasp_visible = True
 
-# Генерация позиций для яблок и клубники
+# Генерация позиций для яблок и клубники (генератор рандома в установленом окне)
 def generate_positions(image_rect, count):
     positions = []
     for _ in range(count):
@@ -58,7 +58,7 @@ def generate_positions(image_rect, count):
         positions.append(pygame.Rect(x, y, image_rect.width, image_rect.height))
     return positions
 
-# Заполняем позиции
+# Определяем рандомные позиции генератором
 apple_positions = generate_positions(image_apple.get_rect(), 4)
 rasp_positions = generate_positions(image_rasp.get_rect(), 4)
 
@@ -120,5 +120,5 @@ while run:
     # Контроль ФПС # держим игорвой цикл на правильной скорости
     clock.tick(fps) #нужно убедиться, что настройка FPS контролирует скорость игры.
 
-pygame.quit()
-sys.exit()
+pygame.quit() # выходим так
+sys.exit() # и эдак
