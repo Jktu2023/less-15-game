@@ -1,37 +1,55 @@
-# Pygame шаблон - скелет для нового проекта Pygame
-import pygame
 import random
 
-WIDTH = 360
-HEIGHT = 480
-FPS = 30
-# Задаем цвета
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
-# Создаем игру и окно
-pygame.init()
-pygame.mixer.init()
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("My Game")
-clock = pygame.time.Clock()
-# Цикл игры
-running = True
-while running:
-    # Держим цикл на правильной скорости
-    clock.tick(FPS)
-    # Ввод процесса (события)
-    for event in pygame.event.get():
-        # check for closing window
-        if event.type == pygame.QUIT:
-            running = False
-<span style="box-sizing: border-box; font-weight: inherit !important; font-size: inherit; padding-left: 0px; color: rgb(152, 143, 129);" class="token comment"># Обновление</span>
+class Warrior:
+    def __init__(self, name, health, attack_power):
+        self.name = name
+        self.health = health
+        self.attack_power = attack_power
 
-<span style="box-sizing: border-box; font-weight: inherit !important; font-size: inherit; padding-left: 0px; color: rgb(152, 143, 129);" class="token comment"># Рендеринг</span>
-screen<span style="box-sizing: border-box; font-weight: inherit !important; font-size: inherit; color: rgb(168, 160, 149);" class="token punctuation">.</span>fill<span style="box-sizing: border-box; font-weight: inherit !important; font-size: inherit; color: rgb(168, 160, 149);" class="token punctuation">(</span>BLACK<span style="box-sizing: border-box; font-weight: inherit !important; font-size: inherit; color: rgb(168, 160, 149);" class="token punctuation">)</span>
-<span style="box-sizing: border-box; font-weight: inherit !important; font-size: inherit; padding-left: 0px; color: rgb(152, 143, 129);" class="token comment"># После отрисовки всего, переворачиваем экран</span>
-pygame<span style="box-sizing: border-box; font-weight: inherit !important; font-size: inherit; color: rgb(168, 160, 149);" class="token punctuation">.</span>display<span style="box-sizing: border-box; font-weight: inherit !important; font-size: inherit; color: rgb(168, 160, 149);" class="token punctuation">.</span>flip<span style="box-sizing: border-box; font-weight: inherit !important; font-size: inherit; color: rgb(168, 160, 149);" class="token punctuation">(</span><span style="box-sizing: border-box; font-weight: inherit !important; font-size: inherit; color: rgb(168, 160, 149);" class="token punctuation">)</span>
+    def attack(self):
+        damage = random.randint(1, self.attack_power)
+        print(f"{self.name} наносит удар, нанося {damage} урона!")
+        return damage
 
-pygame.quit()
+    def is_alive(self):
+        return self.health > 0
+
+    def take_damage(self, damage):
+        self.health -= damage
+        print(f"{self.name} получил {damage} урона! Осталось здоровья: {self.health}")
+
+def main():
+    # Создаем экземпляры воинов
+    player_warrior = Warrior("Ваш воин", 100, 20)
+    computer_warrior = Warrior("Компьютерный воин", 100, 20)
+
+    # Игровой цикл
+    while player_warrior.is_alive() and computer_warrior.is_alive():
+        # Ход игрока
+        action = input("Выберите действие: 'атаковать' или 'сдаться': ").strip().lower()
+        if action == 'атаковать':
+            damage = player_warrior.attack()
+            computer_warrior.take_damage(damage)
+        elif action == 'сдаться':
+            print("Вы сдались. Игра окончена.")
+            break
+        else:
+            print("Некорректное действие. Попробуйте снова.")
+            continue
+
+        # Проверка, жив ли компьютерный воин
+        if not computer_warrior.is_alive():
+            print("Вы победили компьютерного воина!")
+            break
+
+        # Ход компьютера
+        if computer_warrior.is_alive():
+            damage = computer_warrior.attack()
+            player_warrior.take_damage(damage)
+
+        # Проверка, жив ли игрок
+        if not player_warrior.is_alive():
+            print("Ваш воин пал в бою. Игра окончена.")
+
+if __name__ == "__main__":
+    main()

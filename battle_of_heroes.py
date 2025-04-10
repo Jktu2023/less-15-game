@@ -25,6 +25,8 @@ start(): начинает игру, чередует ходы игрока и к
 (кто атаковал и сколько здоровья осталось у противника) и объявляет победителя.
 '''
 
+import random
+
 from abc import ABC, abstractmethod
 class Fighter(ABC): # создаем абстактный класс
     def __init__(self, name, health, attack_power):
@@ -36,9 +38,35 @@ class Fighter(ABC): # создаем абстактный класс
         pass
     def is_alive(self):
         pass
+    def take_damage(self, damage):
+        pass
 
 class Hero(Fighter): # Класс Hero
-    pass
+    def attack(self):
+        damage = random.randint(1, self.attack_power)
+        print(f"{self.name} наносит удар, причиняя {damage}% повреждений!")
+        return damage
 
-class Game(Hero): # Класс Game
-    pass
+    def is_alive(self):
+        return self.health > 0
+
+    def take_damage(self, damage):
+
+        self.health -= damage
+        print(f"{self.name} получил {damage}% повреждений! Осталось {self.health}% здоровья.")
+
+def main():
+    # Создаем экземпляры воинов
+    hero = Hero('Наш Герой', 100, 20)
+    gamer = Hero('Воин ПК', 100, 20)
+
+    # игровой цикл
+    while hero.is_alive() and gamer.is_alive():
+        # наш ход
+        action = input('Ваши действия: введите 1 - чтобы атаковать, 2 - чтобы сдаться').strip().lower()
+        if action == '1':
+            damage = hero.attack()
+            gamer.take_damage(damage)
+        elif action == '2':
+            print("Вы сдались в плен добровольно. Игра окончена.")
+            break
