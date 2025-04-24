@@ -24,9 +24,9 @@ BLACK = (0, 0, 0)
 WIDTH = 800  # ширина игрового окна
 HEIGHT = 600
 
-image_snake = pygame.image.load("snake.png") # Загружаем изображение яблоко
-image_apple = pygame.image.load("apple.png") # Загружаем изображение яблоко
-image_rasp = pygame.image.load("rasp1.png") # Загружаем изображение клубника
+image_snake = pygame.image.load("snake.png") # Загружаем изображение змеи
+image_apple = pygame.image.load("apple.png") # Загружаем изображение яблока
+image_rasp = pygame.image.load("rasp1.png") # Загружаем изображение клубники
 
 # image_rect_snake = image_snake.get_rect() #хитбокс — рамка вокруг каждой части персонажа
 # image_rect_apple = image_apple.get_rect() #хитбокс — рамка вокруг каждой части персонажа
@@ -39,7 +39,7 @@ image_rasp = pygame.image.load("rasp1.png") # Загружаем изображ�
 # Создаём окно с определёнными размерами, с заголовком
 window_size = (WIDTH, HEIGHT)
 screen = pygame.display.set_mode(window_size) #После этого создаем графическое окно, передав в качестве аргумента в функцию set_mode() его разрешение в виде пары целых чисел. В свою очередь функция вернет нам объект типа Surface, используемый для представления изображений:
-pygame.display.set_caption("Змейка")
+pygame.display.set_caption("Змейка") # заголовок окна
 
 # Переменная для хранения позиций яблок и клубники
 apple_positions = []
@@ -50,8 +50,8 @@ rasp_positions = []
 # rasp_visible = True
 
 # Генерация позиций для яблок и клубники (генератор рандома в установленом окне)
-def generate_positions(image_rect, count):
-    positions = []
+def generate_positions(image_rect, count): # count количество позиций для генирации
+    positions = [] # список позиций
     for _ in range(count):
         x = random.randint(0, window_size[0] - image_rect.width)
         y = random.randint(0, window_size[1] - image_rect.height)
@@ -62,7 +62,7 @@ def generate_positions(image_rect, count):
 apple_positions = generate_positions(image_apple.get_rect(), 4)
 rasp_positions = generate_positions(image_rasp.get_rect(), 4)
 
-# Переменная для отслеживания состояния змеи
+# Переменная для отслеживания бфундин-бокса(состояния) змеи
 snake_rect = image_snake.get_rect(center=(400, 300))
 
 # Инициализируем mouseX и mouseY
